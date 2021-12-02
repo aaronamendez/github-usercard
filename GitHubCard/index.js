@@ -38,12 +38,9 @@ import axios from "axios";
     manually find some other users' github handles, or use the list found at the
     bottom of the page. Get at least 5 different Github usernames and add them as
     Individual strings to the friendsArray below.
-
     Using that array, iterate over it, requesting data for each user, creating a new card for each
     user, and adding that card to the DOM.
 */
-
-const followersArray = [];
 
 function cardMaker(obj) {
 	// Create Elements
@@ -66,10 +63,12 @@ function cardMaker(obj) {
 	cardInfo.appendChild(userName);
 	cardInfo.appendChild(location);
 	cardInfo.appendChild(profile);
-	profile.appendChild(profileLink);
+	// profile.appendChild(profileLink);
 	cardInfo.appendChild(followers);
 	cardInfo.appendChild(following);
 	cardInfo.appendChild(bio);
+
+	console.log(profileLink);
 
 	// Giving values
 	card.classList.add("card");
@@ -80,9 +79,11 @@ function cardMaker(obj) {
 	userName.classList.add("username");
 	userName.textContent = obj.login;
 	location.textContent = `Location: ${obj.location}`;
-	profile.textContent = "Profile: ";
+
+	profile.textContent = `Profile: `;
 	profileLink.setAttribute("href", `${obj.html_url}`);
 	profileLink.textContent = `${obj.html_url}`;
+	profile.appendChild(profileLink);
 	followers.textContent = `Followers: ${obj.followers}`;
 	following.textContent = `Following: ${obj.following}`;
 	bio.textContent = `Bio: ${obj.bio}`;
@@ -96,11 +97,31 @@ function cardMaker(obj) {
 axios
 	.get("https://api.github.com/users/aaronamendez")
 	.then((res) => {
+		console.log(res);
 		document.querySelector(".cards").appendChild(cardMaker(res.data));
 	})
 	.catch((err) => {
 		console.error(err);
 	});
+
+const followersArray = [
+	"Berenika14",
+	"isaiahjturner",
+	"Sparkadelic177",
+	"aspindle",
+	"cpadilla",
+];
+
+followersArray.forEach((el) => {
+	axios
+		.get(`https://api.github.com/users/${el}`)
+		.then((res) => {
+			document.querySelector(".cards").appendChild(cardMaker(res.data));
+		})
+		.catch((err) => {
+			console.error(err);
+		});
+});
 
 /*
   List of LS Instructors Github username's:
